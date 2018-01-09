@@ -6,7 +6,7 @@ An update service written in go. Uses usbmuxd (connect to iPad) and systemd
 Basically this program acts a role as a file manager from iPad, iPad can
 write,change,delete,create new files in our system. Furthermore, this program
 allows iPad to send execute instructions and execute files in our system. For
-detailed commands, see [Avaliable commands](##Avaliable commands)
+detailed commands, see [Avaliable commands](#avaliable-commands)
 
 # environments
 
@@ -21,7 +21,7 @@ go build
 and go will create an executable with the current dir name (update-service-go)
 Put this executable in Linux system and run the service as put in systemd
 
-## Avaliable commands
+# Avaliable commands
 
 ### for every single command, conclude it as [[::Whole message here::]]
 
