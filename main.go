@@ -12,7 +12,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/exec"
 )
 
 // some global vars
@@ -103,46 +102,10 @@ func (usb USBDeviceDelegate) USBDeviceDidFailToConnect(device USB.ConnectedDevic
 
 func (usb USBDeviceDelegate) USBDeviceDidReceiveData(device USB.ConnectedDevices, deviceID int, messageTAG uint32, data []byte) {
 	// received data from the device
-
-	// if no content, its value would be <nil>
-	// s := communication.Deciphor(string(data))
-	s := strings.Split(communication.Deciphor(string(data),":")
-	command, filename := s[0], s[1]
-	var content []byte
-	if len(s) == 3 {
-		content = []byte(s[2])
-	}
-
-	if command == "" {
-		log.Printf("No command received")
-		return
-	}
-	if filename == "" {
-		log.Printf("No filename received")
-		return
-	}
-
-	switch command {
-	case "deletefile":
-                // delete a file
-		cmd := exec.Command("rm", filename)
-		cmd.Run()
-	case "writefile":
-                // write to a file, if not exist, will create
-		err := ioutil.WriteFile(filename, content, 0644)
-		if err != nil {
-			panic(err)
-		}
-
-	case "exec":
-                // execute a file as shell file
-		cmd := exec.Command("sh", filename)
-		cmd.Run()
-	default:
-                log.Printf("Unkonwn command received:%s", command)
-	}
-
-
+        // run tasks from communication
+        // returns some data to device
+	var ret string = communication.Perform(string(data))
+	device.SendData([]byte(ret), 106)
 	//device.SendData(data[20:], 106)
 }
 
