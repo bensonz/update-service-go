@@ -1,0 +1,14 @@
+[Unit]
+Description=CSkin Firmware update service
+Wants=usbmuxd.service
+After=usbmuxd.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+WorkingDirectory=/home/cskin/update-service-go
+ExecStart=/usr/bin/sh update-service-go
+
+[Install]
+WantedBy=multi-user.target
